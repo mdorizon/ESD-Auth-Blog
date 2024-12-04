@@ -2,6 +2,7 @@ import express from 'express';
 import loggerMiddleware from './middleware/logger.middleware';
 import UserController from './routes/user/user.controller';
 import PostController from './routes/post/post.controller';
+import AuthController from './routes/auth/auth.controller';
 
 const app = express();
 const port = 8000;
@@ -13,6 +14,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(loggerMiddleware)
+app.use("/auth", AuthController)
 app.use("/user", UserController)
 app.use("/post", PostController)
 

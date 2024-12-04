@@ -12,20 +12,15 @@ const getAll = async(req: Request, res: Response) => {
   }
 };
 
-const getOne = async (req: Request, res: Response) => {
-  const id = req.params.id;
+const getOne = async (id: Number) => {
   try {
     const result = await client.query('SELECT * FROM public.user WHERE id = $1', [id]);
+    const user = result.rows[0];
 
-    if (result.rows.length === 0) {
-      res.status(404).send({ error: "User not found" });
-      return;
-    }
-
-    res.status(200).send(result.rows[0]);
+    return user
   } catch (e) {
-    console.error('Database error:', e);
-    res.status(500).send({ error: 'Error while fetching data' });
+    console.error('Error Fetching user:', e);
+    return null;
   }
 };
 
