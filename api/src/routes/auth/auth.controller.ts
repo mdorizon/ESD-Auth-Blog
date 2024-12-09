@@ -24,8 +24,10 @@ AuthController.post("/signup", async (req: Request, res: Response) => {
 
   if (result) {
     res.status(201).send({ message: "User created" });
+    console.log(result)
   } else {
     res.status(400).send({ message: "User not created" });
+    console.log(result)
   }
 });
 

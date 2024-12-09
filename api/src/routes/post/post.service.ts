@@ -12,6 +12,19 @@ const getAll = async(req: Request, res: Response) => {
   }
 };
 
+const getAllByUser = async(req: Request, res: Response) => {
+  const user_id = req.user?.id
+
+  try {
+    const result = await client.query('SELECT * FROM public.post where user_id = $1', [user_id]);
+
+    res.status(200).send(result.rows);
+  } catch (e) {
+    console.error('Database error:', e);
+    res.status(500).send({ error: 'Error while fetching data' });
+  }
+};
+
 const getOne = async (req: Request, res: Response) => {
   const id = req.params.id;
   try {
@@ -30,7 +43,8 @@ const getOne = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  const { user_id, title, content, image_path } = req.body;
+  const user_id = req.user?.id
+  const { title, content, image_path } = req.body;
 
   try {
     const result = await client.query('SELECT * FROM public.user WHERE id = $1', [user_id]);
@@ -61,6 +75,12 @@ const update = async(req: Request, res: Response) => {
 
     if (Array.isArray(result) && result.length === 0) {
       res.status(404).send({ error: "Post not found" });
+      return;
+    }
+    
+    // si l'user n'est pas le créateur du post il ne peux pas modifier (plus tard faire en sorte que les admins bypass ceci !)
+    if (result[0].user_id !== req.user?.id) {
+      res.status(401).send({ error: "You do not have the permission to modify this post !" });
       return;
     }
 
@@ -97,10 +117,17 @@ const remove = async(req: Request, res: Response) => {
 
   try {
     const result = (await client.query('SELECT * FROM public.post WHERE id = $1', [id])).rows;
+
     if (Array.isArray(result) && result.length === 0) {
       res.status(404).send({ error: "Post not found" });
       return;
     };
+
+    // si l'user n'est pas le créateur du post il ne peux pas le supprimer
+    if (result[0].user_id !== req.user?.id) {
+      res.status(401).send({ error: "You do not have the permission to delete this post !" });
+      return;
+    }
     
     try {
       await client.query('DELETE FROM public.post WHERE id = $1', [id]);
@@ -117,6 +144,7 @@ const remove = async(req: Request, res: Response) => {
 
 export default {
   getAll,
+  getAllByUser,
   getOne,
   create,
   update,

@@ -20,7 +20,7 @@ UserController.get("/:id", async (req: Request, res: Response) => {
 
   res.send(user);
 });
-UserController.get("/:id", UserService.update);
-UserController.get("/:id", UserService.remove);
+UserController.put("/:id", UserService.update);
+UserController.delete("/:id", UserService.remove);
 
 export default UserController;
