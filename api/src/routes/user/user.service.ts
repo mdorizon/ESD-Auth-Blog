@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import client from "../../config/database.config";
+import { IUser, IUserDTO } from "./user.types";
 
-const getAll = async(req: Request, res: Response) => {
+const getAll = async (req: Request, res: Response) => {
   try {
     const result = await client.query('SELECT * FROM public.user');
 
@@ -12,27 +13,46 @@ const getAll = async(req: Request, res: Response) => {
   }
 };
 
-const getOne = async (id: Number) => {
+const getOneByUsername = async (username: string): Promise<IUser | null> => {
+  const query = "SELECT * FROM public.user WHERE username = $1";
+  const values = [username];
+
+  const result = await client.query(query, values);
+  const user = result.rows[0];
+
+  if (!user) {
+    return null;
+  }
+
+  return user;
+};
+
+const getOneById = async (id: number): Promise<IUser | null> => {
+  const query = "SELECT * FROM public.user WHERE id = $1";
+  const values = [id];
+
   try {
-    const result = await client.query('SELECT * FROM public.user WHERE id = $1', [id]);
+    const result = await client.query(query, values);
     const user = result.rows[0];
 
-    return user
-  } catch (e) {
-    console.error('Error Fetching user:', e);
+    return user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
     return null;
   }
 };
 
-const create = async (req: Request, res: Response) => {
-  const { username, password, email } = req.body;
-  try {
-    await client.query('INSERT INTO public.user (username, password, email) VALUES ($1, $2, $3)', [username, password, email]);
+const create = async (userDTO: IUserDTO) => {
+  const query = "INSERT INTO public.user (username, password) VALUES ($1, $2)";
+  const values = [userDTO.username, userDTO.password];
 
-    res.status(200).send({ message: "User created successfully" });
-  } catch (e) {
-    console.error('Database error:', e);
-    res.status(500).send({ error: 'Error while fetching data' });
+  try {
+    await client.query(query, values);
+
+    return true;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return false;
   }
 };
 
@@ -99,8 +119,9 @@ const remove = async(req: Request, res: Response) => {
 
 export default {
   getAll,
-  getOne,
+  getOneById,
   create,
   update,
-  remove
-}
+  remove,
+  getOneByUsername,
+};
