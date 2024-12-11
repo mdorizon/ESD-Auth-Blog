@@ -1,5 +1,6 @@
+import { Request, Response } from "express";
 import userService from "../user/user.service";
-import { IUserDTO } from "../user/user.types";
+import { IUser, IUserDTO } from "../user/user.types";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
@@ -33,7 +34,12 @@ const signup = async (userDTO: IUserDTO) => {
   return userService.create(userDTO);
 };
 
+const whoami = async (user_id: number) => {
+  return await userService.getOneById(user_id)
+};
+
 export default {
   signin,
   signup,
+  whoami,
 };
