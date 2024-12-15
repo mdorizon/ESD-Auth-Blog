@@ -35,7 +35,7 @@ export const getAllPostsByUser = async () => {
   return data;
 };
 
-export const getOneById = async (id: string) => {
+export const getOneById = async (id: number) => {
   const response = await fetch(`${API_URL}/posts/${id}`);
 
   if (!response.ok) {
@@ -70,7 +70,7 @@ export const create = async (post: PostDTO) => {
   return data;
 };
 
-export const update = async (post: PostDTO, id: string) => {
+export const update = async (post: PostDTO, id: number) => {
   const token = localStorage.getItem("access_token");
   if (!token) {
     throw new Error("Token not found in localStorage");
@@ -93,7 +93,7 @@ export const update = async (post: PostDTO, id: string) => {
   return data;
 };
 
-export const remove = async (id: string) => {
+export const remove = async (id: number) => {
   const token = localStorage.getItem("access_token");
   if (!token) {
     throw new Error("Token not found in localStorage");

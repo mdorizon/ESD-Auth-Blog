@@ -59,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             }
           </SidebarMenu>
         </SidebarGroup>
-        {user && <NavPersonnalsPosts posts={userPosts} />}
+        {user && <NavPersonnalsPosts posts={userPosts} reloadData={fetchUserData} />}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

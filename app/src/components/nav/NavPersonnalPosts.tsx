@@ -4,18 +4,28 @@ import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, Sideba
 import { Link } from "react-router-dom"
 import React from "react"
 import { PostType } from "@/types/post.type"
+import { remove } from "@/services/post.service"
+import { toast } from "sonner"
 
 type postProps = {
-  posts: PostType[]
+  posts: PostType[],
+  reloadData: () => void
 }
 
-export function NavPersonnalsPosts({ posts }: postProps){
+export function NavPersonnalsPosts({ posts, reloadData }: postProps){
   const { isMobile } = useSidebar()
   const [showAllPosts, setShowAllPosts] = React.useState(false)
   
   // delete un post
-  const handleDelete = () => {
-    console.log('delete')
+  const handleDelete = (id: number) => {
+    try {
+      remove(id)
+      reloadData()
+      toast.success('Post has been deleted successfully')
+    } catch (e) {
+      toast.error('Error while deleting post !')
+      console.error('Error while deleting post' + e)
+    }
   }
 
   // Gestion des posts à afficher
@@ -51,7 +61,7 @@ export function NavPersonnalsPosts({ posts }: postProps){
                     <span>Edit Post</span>
                   </DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem onClick={handleDelete}>
+                <DropdownMenuItem onClick={() => handleDelete(item.id)}>
                   <Trash2 className="text-muted-foreground" />
                   <span>Delete Post</span>
                 </DropdownMenuItem>
