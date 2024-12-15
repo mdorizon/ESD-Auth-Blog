@@ -32,6 +32,7 @@ const SignupForm = () => {
         }
 
         // enregistrement du token dans le local storage
+        localStorage.removeItem('access_token');
         localStorage.setItem('access_token', token);
         
         // reset des champs du formulaire
