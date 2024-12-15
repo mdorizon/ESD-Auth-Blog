@@ -3,15 +3,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
 import { Link } from "react-router-dom"
 import React from "react"
+import { PostType } from "@/types/post.type"
 
-export function NavPersonnalsPosts({
-  posts,
-}: {
-  posts: {
-    title: string
-    id: number
-  }[]
-}) {
+type postProps = {
+  posts: PostType[]
+}
+
+export function NavPersonnalsPosts({ posts }: postProps){
   const { isMobile } = useSidebar()
   const [showAllPosts, setShowAllPosts] = React.useState(false)
   
