@@ -1,8 +1,10 @@
+import PostArchive from "@/components/post/PostArchive";
+
 const PostListPage = () => {
 
   return (
     <div>
-      <p>post list page</p>
+      <PostArchive />
     </div>
   );
 }
