@@ -1,7 +1,9 @@
+import PostCreateForm from "@/components/post/PostCreateForm";
+
 const PostAddPage = () => {
   return (
-    <div>
-      <p>post add page</p>
+    <div className="h-full flex justify-center items-center">
+      <PostCreateForm />
     </div>
   );
 }

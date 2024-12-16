@@ -55,9 +55,9 @@ const create = async (req: Request, res: Response) => {
     }
 
     try {
-      await client.query('INSERT INTO public.post (user_id, title, content, image_path) VALUES ($1, $2, $3, $4)', [user_id, title, content, image_path]);
+      const result = await client.query('INSERT INTO public.post (user_id, title, content, image_path) VALUES ($1, $2, $3, $4) RETURNING id', [user_id, title, content, image_path]);
 
-      res.status(200).send({ message: "Post created successfully" });
+      res.status(200).send({ message: "Post created successfully", id: result.rows[0].id });
     } catch (e) {
       console.error('Database error:', e);
       res.status(500).send({ error: 'Error while fetching data' });
