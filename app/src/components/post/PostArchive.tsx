@@ -9,7 +9,7 @@ const PostArchive = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 12;
+  const postsPerPage = 6;
 
   useEffect(() => {
     const fetchPosts = async () => {
