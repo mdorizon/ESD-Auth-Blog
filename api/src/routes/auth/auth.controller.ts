@@ -50,4 +50,8 @@ AuthController.post("/signup", async (req: Request, res: Response) => {
   }
 });
 
+AuthController.get("/verify", authMiddleware, async (req: Request, res: Response) => {
+  res.status(200).send({ message: "Token valid" });
+});
+
 export default AuthController;

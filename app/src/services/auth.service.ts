@@ -30,12 +30,11 @@ export const signin = async (credentials: UserDTO) => {
     body: JSON.stringify(credentials),
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || `Request failed with status ${response.status}`);
-  }
+  const data = await response.json();
   
-  const data = await response.json()
+  if (!response.ok) {
+    throw new Error(data.message || `Request failed with status ${response.status}`);
+  }
 
   return data.access_token
 }

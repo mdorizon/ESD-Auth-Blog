@@ -1,7 +1,7 @@
-import { create } from "@/services/post.service";
+import { create, getOneById, update } from "@/services/post.service";
 import { PostDTO } from "@/types/post.type";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
@@ -9,13 +9,29 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
-const PostCreateForm = () => {
+const PostForm = () => {
   const [credentials, setCredentials] = useState<PostDTO>({
     title: "",
     content: "",
     image_path: ""
   });
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) fetchPostData();
+  }, [id])
+
+  const fetchPostData = async () => {
+    try {
+      if (id) {
+        const postData = await getOneById(parseInt(id))
+        setCredentials(postData)
+      }
+    } catch (e) {
+      console.log('Error to fetch post Datas !', e)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -26,7 +42,12 @@ const PostCreateForm = () => {
         throw new Error('You have to be connected to create a new post !');
       }
 
-      const response = await create(credentials)
+      let response;
+      if (id) {
+        response = await update(credentials, parseInt(id))
+      } else {
+        response = await create(credentials)
+      }
 
       setCredentials({
         title: "",
@@ -34,8 +55,13 @@ const PostCreateForm = () => {
         image_path: ""
       })
 
-      toast.success('Le post à bien été créer')
-      navigate(`/post/${response.id}`)
+      if (id) {
+        toast.success('Le post à bien été modifié')
+        navigate(`/post/${id}`)
+      } else {
+        navigate(`/post/${response.id}`)
+        toast.success('Le post à bien été créer')
+      }
     } catch (e) {
       // @ts-expect-error because error is unknown type
       toast.error(e.toString())
@@ -54,7 +80,7 @@ const PostCreateForm = () => {
   return (
     <Card className="mx-auto min-w-96 max-w-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">Create a new post</CardTitle>
+        <CardTitle className="text-2xl">{ id ? 'Modifying a post' : 'Create a new post' }</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="grid gap-4">
@@ -96,7 +122,7 @@ const PostCreateForm = () => {
             />
           </div>
           <Button type="submit" className="w-full">
-            Create
+            { id ? 'Update' : 'Create' }
           </Button>
         </form>
       </CardContent>
@@ -104,4 +130,4 @@ const PostCreateForm = () => {
   );
 }
 
-export default PostCreateForm;
+export default PostForm;

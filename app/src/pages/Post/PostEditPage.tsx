@@ -1,8 +1,9 @@
-const PostEditPage = () => {
+import PostForm from "@/components/post/PostForm";
 
+const PostEditPage = () => {
   return (
-    <div>
-      <p>post edit page</p>
+    <div className="h-full flex justify-center items-center">
+      <PostForm />
     </div>
   );
 }

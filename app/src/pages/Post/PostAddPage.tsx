@@ -1,9 +1,10 @@
-import PostCreateForm from "@/components/post/PostCreateForm";
+import PostForm from "@/components/post/PostForm";
 
 const PostAddPage = () => {
+
   return (
     <div className="h-full flex justify-center items-center">
-      <PostCreateForm />
+      <PostForm />
     </div>
   );
 }
