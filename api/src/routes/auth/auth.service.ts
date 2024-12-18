@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
 import userService from "../user/user.service";
-import { IUser, IUserDTO } from "../user/user.types";
+import { IUser, IUserDTO, SigninIUserDTO } from "../user/user.types";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
-const signin = async (userDTO: IUserDTO) => {
+const signin = async (userDTO: SigninIUserDTO) => {
   // Check if user exists
-  const user = await userService.getOneByUsername(userDTO.username);
+  const user = await userService.getOneByEmail(userDTO.email);
+  console.log(user)
 
   if (!user) {
     return null;
@@ -20,7 +21,7 @@ const signin = async (userDTO: IUserDTO) => {
   }
 
   const access_token = jwt.sign(
-    { id: user.id, username: user.username },
+    { id: user.id, email: user.email },
     JWT_SECRET,
     {
       expiresIn: "12h",

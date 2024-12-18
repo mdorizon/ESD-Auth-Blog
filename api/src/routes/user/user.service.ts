@@ -13,9 +13,9 @@ const getAll = async (req: Request, res: Response) => {
   }
 };
 
-const getOneByUsername = async (username: string): Promise<IUser | null> => {
-  const query = "SELECT * FROM public.user WHERE username = $1";
-  const values = [username];
+const getOneByEmail = async (email: string): Promise<IUser | null> => {
+  const query = "SELECT * FROM public.user WHERE email = $1";
+  const values = [email];
 
   const result = await client.query(query, values);
   const user = result.rows[0];
@@ -43,8 +43,8 @@ const getOneById = async (id: number): Promise<IUser | null> => {
 };
 
 const create = async (userDTO: IUserDTO) => {
-  const query = "INSERT INTO public.user (username, password) VALUES ($1, $2)";
-  const values = [userDTO.username, userDTO.password];
+  const query = "INSERT INTO public.user (username, password, email) VALUES ($1, $2, $3)";
+  const values = [userDTO.username, userDTO.password, userDTO.email];
 
   try {
     await client.query(query, values);
@@ -123,5 +123,5 @@ export default {
   create,
   update,
   remove,
-  getOneByUsername,
+  getOneByEmail,
 };

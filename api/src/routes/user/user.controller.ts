@@ -5,8 +5,8 @@ const UserController = Router();
 
 UserController.get("/", UserService.getAll);
 UserController.post("/", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userDTO = { username, password };
+  const { email, username, password } = req.body;
+  const userDTO = { email, username, password };
   const user = await UserService.create(userDTO);
 
   res.status(201).send(user);

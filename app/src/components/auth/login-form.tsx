@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { UserDTO } from "@/types/user.type"
 import { signin } from "@/services/auth.service"
+import { toast } from "sonner"
 
 export function LoginForm({
   className,
@@ -71,13 +72,13 @@ export function LoginForm({
                 </p>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
-                  id="username"
-                  name="username"
-                  type="text"
+                  id="email"
+                  name="email"
+                  type="email"
                   onChange={handleChange}
-                  value={credentials.username}
+                  value={credentials.email}
                   placeholder="m@example.com"
                   required
                 />

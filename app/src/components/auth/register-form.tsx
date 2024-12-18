@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { UserDTO } from "@/types/user.type"
 import { signin, signup } from "@/services/auth.service"
+import { toast } from "sonner"
 
 export function RegisterForm({
   className,
@@ -76,7 +77,7 @@ export function RegisterForm({
                 <Input
                   id="email"
                   name="email"
-                  type="text"
+                  type="email"
                   onChange={handleChange}
                   value={credentials.email}
                   placeholder="m@example.com"

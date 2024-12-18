@@ -23,8 +23,8 @@ AuthController.get("/", authMiddleware, async (req: Request, res: Response) => {
 
 
 AuthController.post("/signin", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userDTO = { username, password };
+  const { email, password } = req.body;
+  const userDTO = { email, password };
 
   const access_token = await AuthService.signin(userDTO);
 
@@ -36,8 +36,8 @@ AuthController.post("/signin", async (req: Request, res: Response) => {
 });
 
 AuthController.post("/signup", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userDTO = { username, password };
+  const { email, username, password } = req.body;
+  const userDTO = { email, username, password };
   
   const result = await AuthService.signup(userDTO);
 
@@ -45,7 +45,7 @@ AuthController.post("/signup", async (req: Request, res: Response) => {
     res.status(201).send({ message: "User created" });
     console.log(result)
   } else {
-    res.status(400).send({ message: "Username already used !" });
+    res.status(400).send({ message: "Email already used !" });
     console.log(result)
   }
 });
