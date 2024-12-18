@@ -1,39 +1,34 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Toaster } from "sonner"
-import PostListPage from "./pages/Post/PostListPage"
-import { SidebarProvider } from "./components/ui/sidebar"
-import { AppSidebar } from "./components/nav/AppSidebar"
-import PostAddPage from "./pages/Post/PostAddPage"
-import SignupPage from "./pages/auth/SignupPage"
-import SigninPage from "./pages/auth/SigninPage"
-import PostEditPage from "./pages/Post/PostEditPage"
-import PostSinglePage from "./pages/Post/PostSinglePage"
+import Layout from "./Layout"
+import LoginPage from "./app/login"
+import RegisterPage from "./app/register"
+import PostListPage from "./app/index"
+import PostAddPage from "./app/post/add"
+import PostEditPage from "./app/post/edit"
+import PostSinglePage from "./app/post/single"
 import ProtectedRoute from "./components/ProtectedRoute"
-
 
 function App() {
 
   return (
     <BrowserRouter>
-      <SidebarProvider>
-        <AppSidebar />
-        <main className="w-full">
+      <Layout>
           <Routes>
+            {/* routes protectes */}
             <Route element={<ProtectedRoute />}>
               {/* Post */}
               <Route path='/' element={<PostListPage />} />
               <Route path='/post/:id' element={<PostSinglePage />} />
-              {/* Routes Protégées */}
               <Route path='/post/add' element={<PostAddPage />} />
               <Route path='/post/edit/:id' element={<PostEditPage />} />
             </Route>
             {/* Auth Pages */}
-            <Route path='/register' element={<SignupPage />} />
-            <Route path='/login' element={<SigninPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/login' element={<LoginPage />} />
           </Routes>
-        </main>
         <Toaster richColors position="bottom-right" />
-      </SidebarProvider>
+      </Layout>
     </BrowserRouter>
   )
 }
