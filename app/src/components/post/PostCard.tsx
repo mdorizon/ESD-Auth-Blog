@@ -11,8 +11,7 @@ const PostCard = ({ title, content, image_path, user_id, created_at, id, usernam
       <img src={image_path ? image_path : placeholderImage} alt={title} className="w-full h-64 object-cover" />
       <CardContent className="p-4">
         <CardDescription className="text-sm font-semibold mb-2">Par {username} - {new Date(created_at).toLocaleDateString()}</CardDescription>
-        <CardTitle className="text-lg font-bold mb-2 truncate">{title}</CardTitle>
-        <p className="text-sm text-gray-700 mb-4">{content.length > 128 ? `${content.slice(0, 128)}...` : content}</p>
+        <CardTitle className="text-lg font-bold mb-2">{title}</CardTitle>
       </CardContent>
       <CardFooter className="mt-auto">
         <Link to={`/post/${id}`} className="w-full">
