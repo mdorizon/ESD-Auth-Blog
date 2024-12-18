@@ -8,6 +8,7 @@ import PostAddPage from "./app/post/add"
 import PostEditPage from "./app/post/edit"
 import PostSinglePage from "./app/post/single"
 import ProtectedRoute from "./components/ProtectedRoute"
+import UserSettings from "./app/user/settings"
 
 function App() {
 
@@ -22,6 +23,8 @@ function App() {
                 <Route path='/post/:id' element={<PostSinglePage />} />
                 <Route path='/post/add' element={<PostAddPage />} />
                 <Route path='/post/edit/:id' element={<PostEditPage />} />
+              {/* User */}
+                <Route path='/settings' element={<UserSettings />} />
             </Route>
             {/* Auth Pages */}
             <Route path='/register' element={<RegisterPage />} />

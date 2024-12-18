@@ -1,8 +1,8 @@
 "use client"
 
-import { ChevronsUpDown, LogOut, User } from "lucide-react"
+import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
 import { UserType } from "@/types/user.type"
 import { Link } from "react-router-dom"
@@ -64,18 +64,15 @@ export function NavUser({ user }: userProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {/* paramètres et notifications ( pour plus tard ) */}
-              {/* <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Settings />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Bell />
-                  Notifications
-                </DropdownMenuItem>
+              <DropdownMenuGroup>
+                <Link to={'/settings'}>
+                  <DropdownMenuItem>
+                    <Settings />
+                    Settings
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator /> */}
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut />
                 Log out
