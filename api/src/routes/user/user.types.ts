@@ -5,13 +5,13 @@ export interface IUser {
   password: string;
 }
 
-export interface IUserDTO {
-  username: string;
+export interface SigninIUserDTO {
   email: string;
   password: string;
 }
 
-export interface SigninIUserDTO {
+export interface SignupIUserDTO {
+  username: string;
   email: string;
   password: string;
 }

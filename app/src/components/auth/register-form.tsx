@@ -17,6 +17,7 @@ export function RegisterForm({
     username: "",
     email: "",
     password: "",
+    repeatPassword: "",
   });
   const navigate = useNavigate();
   
@@ -39,6 +40,7 @@ export function RegisterForm({
           username: "",
           email: "",
           password: "",
+          repeatPassword: "",
         })
 
         navigate('/')
@@ -108,13 +110,13 @@ export function RegisterForm({
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="re-password">Repeat password</Label>
+                <Label htmlFor="repeatPassword">Repeat password</Label>
                 <Input 
                   onChange={handleChange} 
-                  id="re-password" 
-                  name="re-password" 
+                  id="repeatPassword" 
+                  name="repeatPassword" 
                   type="password"
-                  // value={credentials.password}
+                  value={credentials.repeatPassword}
                   required 
                 />
               </div>

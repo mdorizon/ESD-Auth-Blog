@@ -1,9 +1,7 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import client from "../../config/database.config";
-import { IUser, IUserDTO } from "./user.types";
-
-const SALT_ROUNDS = 10;
+import { IUser, SignupIUserDTO } from "./user.types";
 
 const getAll = async (req: Request, res: Response) => {
   try {
@@ -43,10 +41,9 @@ const getOneById = async (id: number): Promise<Partial<IUser> | null> => {
   }
 };
 
-const create = async (userDTO: IUserDTO) => {
-  const hashedPassword = await bcrypt.hash(userDTO.password, SALT_ROUNDS);
+const create = async (userDTO: SignupIUserDTO) => {
   const query = "INSERT INTO public.user (username, password, email) VALUES ($1, $2, $3)";
-  const values = [userDTO.username, hashedPassword, userDTO.email];
+  const values = [userDTO.username, userDTO.password, userDTO.email];
 
   try {
     await client.query(query, values);
@@ -78,7 +75,7 @@ const update = async (req: Request, res: Response) => {
         "UPDATE public.user SET username=$1, password=$2, email=$3 WHERE id = $4";
       const values = [
         newUser.username,
-        req.body.password ? await bcrypt.hash(newUser.password, SALT_ROUNDS) : currentUser.password,
+        req.body.password ? await bcrypt.hash(newUser.password, 10) : currentUser.password,
         newUser.email,
         id,
       ];

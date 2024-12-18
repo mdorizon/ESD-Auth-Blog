@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { Request, Response, Router } from "express";
 import AuthService from "./auth.service";
 import authMiddleware from "../../middleware/auth.middleware";
@@ -36,8 +37,31 @@ AuthController.post("/signin", async (req: Request, res: Response) => {
 });
 
 AuthController.post("/signup", async (req: Request, res: Response) => {
-  const { email, username, password } = req.body;
-  const userDTO = { email, username, password };
+  const { email, username, password, repeatPassword } = req.body;
+
+  // Vérification des champs
+  switch (true) {
+    case !email:
+      res.status(400).send({ message: "Veuillez renseigner un email" });
+      return;
+    case !username:
+      res.status(400).send({ message: "Veuillez renseigner un nom d'utilisateur" });
+      return;
+    case !password || !repeatPassword:
+      res.status(400).send({ message: "Veuillez renseigner un mot de passe" });
+      return;
+  }
+
+  // Vérification que les mots de passe correspondent
+  if (password !== repeatPassword) {
+    res.status(400).send({ message: "Les mots de passe ne correspondent pas." });
+    return;
+  }
+
+  // Hachage du mot de passe
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  const userDTO = { email, username, password: hashedPassword };
   
   const result = await AuthService.signup(userDTO);
 
@@ -45,7 +69,7 @@ AuthController.post("/signup", async (req: Request, res: Response) => {
     res.status(201).send({ message: "User created" });
     console.log(result)
   } else {
-    res.status(400).send({ message: "Email already used !" });
+    res.status(400).send({ message: "Cet email est déjà utilisé !" });
     console.log(result)
   }
 });

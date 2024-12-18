@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import userService from "../user/user.service";
-import { IUser, IUserDTO, SigninIUserDTO } from "../user/user.types";
+import { SigninIUserDTO, SignupIUserDTO } from "../user/user.types";
 
 dotenv.config();
 
@@ -27,7 +27,7 @@ const signin = async (userDTO: SigninIUserDTO) => {
   return access_token;
 };
 
-const signup = async (userDTO: IUserDTO) => {
+const signup = async (userDTO: SignupIUserDTO) => {
   return userService.create(userDTO);
 };
 
