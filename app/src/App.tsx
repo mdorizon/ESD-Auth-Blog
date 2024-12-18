@@ -18,10 +18,10 @@ function App() {
             {/* routes protectes */}
             <Route element={<ProtectedRoute />}>
               {/* Post */}
-              <Route path='/' element={<PostListPage />} />
-              <Route path='/post/:id' element={<PostSinglePage />} />
-              <Route path='/post/add' element={<PostAddPage />} />
-              <Route path='/post/edit/:id' element={<PostEditPage />} />
+                <Route path='/' element={<PostListPage />} />
+                <Route path='/post/:id' element={<PostSinglePage />} />
+                <Route path='/post/add' element={<PostAddPage />} />
+                <Route path='/post/edit/:id' element={<PostEditPage />} />
             </Route>
             {/* Auth Pages */}
             <Route path='/register' element={<RegisterPage />} />

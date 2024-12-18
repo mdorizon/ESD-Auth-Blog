@@ -1,33 +1,38 @@
 import { Frame, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import React from "react"
 import { PostType } from "@/types/post.type"
 import { remove } from "@/services/post.service"
 import { toast } from "sonner"
+import { useUserPosts } from "@/context/UserPostsProvider"
 
 type postProps = {
   posts: PostType[],
-  reloadData: () => void
 }
 
-export function NavPersonnalsPosts({ posts, reloadData }: postProps){
+export function NavPersonnalsPosts({ posts }: postProps){
   const { isMobile } = useSidebar()
+    const { fetchUserData } = useUserPosts();
   const [showAllPosts, setShowAllPosts] = React.useState(false)
-  
+
+  const Navigate = useNavigate();
+
   // delete un post
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     try {
-      remove(id)
-      reloadData()
+      await remove(id)
       toast.success('Post has been deleted successfully')
+      await fetchUserData();
     } catch (e) {
       toast.error('Error while deleting post !')
       console.error('Error while deleting post' + e)
+    } finally {
+      Navigate('/')
     }
   }
-
+  
   // Gestion des posts à afficher
   const visiblePosts = showAllPosts ? posts : posts.slice(0, 5)
 

@@ -8,8 +8,10 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { useUserPosts } from "@/context/UserPostsProvider";
 
 const PostForm = () => {
+  const { fetchUserData } = useUserPosts();
   const [credentials, setCredentials] = useState<PostDTO>({
     title: "",
     content: "",
@@ -62,6 +64,7 @@ const PostForm = () => {
         navigate(`/post/${response.id}`)
         toast.success('Le post à bien été créer')
       }
+      fetchUserData();
     } catch (e) {
       // @ts-expect-error because error is unknown type
       toast.error(e.toString())

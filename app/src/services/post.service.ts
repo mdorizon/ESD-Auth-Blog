@@ -111,6 +111,5 @@ export const remove = async (id: number) => {
     throw new Error(`Request failed with status ${response.status}`);
   };
 
-  const data = await response.json();
-  return data;
+  return;
 };

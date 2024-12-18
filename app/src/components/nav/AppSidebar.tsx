@@ -1,32 +1,24 @@
-import * as React from "react"
 import { Columns2, SquarePlus } from "lucide-react"
 import { NavPersonnalsPosts } from "@/components/nav/NavPersonnalPosts"
 import { NavUser } from "@/components/nav/nav-user"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail } from "@/components/ui/sidebar"
-import { getAllPostsByUser } from "@/services/post.service"
 import { Link } from "react-router-dom"
 import { useAuth } from "@/hooks/useAuth"
+import { ComponentProps, useEffect } from "react"
+import { useUserPosts } from "@/context/UserPostsProvider"
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [userPosts, setUserPosts] = React.useState([])
-  const { userData, loading} = useAuth();
+export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
+  const { userPosts, fetchUserData } = useUserPosts();
+  const { userData, loading } = useAuth();
   
-  // fetch user & his posts
-  const fetchUserData = async() => {
-    try {
-      const posts = await getAllPostsByUser();
-      setUserPosts(posts);
-    } catch (e) {
-      console.log('Error to fetch user posts', e)
+  useEffect(() => {
+    if (userData) {
+      fetchUserData();
     }
-  }
-  
-  React.useEffect(() => {
-    fetchUserData()
-  }, [])
-  
-  if(loading){return}
+  }, [userData, fetchUserData]);
 
+  if(loading){return}
+  
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
@@ -53,10 +45,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             }
           </SidebarMenu>
         </SidebarGroup>
-        {userData && <NavPersonnalsPosts posts={userPosts} reloadData={fetchUserData} />}
+        {userData && <NavPersonnalsPosts posts={userPosts} />}
       </SidebarContent>
       <SidebarFooter>
-        {userData && <NavUser user={userData} />}
+        <NavUser user={userData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
