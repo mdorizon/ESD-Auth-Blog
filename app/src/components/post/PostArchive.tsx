@@ -35,9 +35,10 @@ const PostArchive = () => {
           title={post.title}
           content={post.content}
           image_path={post.image_path}
-          user_id={post.user_id}
           created_at={post.created_at}
+          user_id={post.user_id}
           id={post.id}
+          username={post.username}
         />
       ))}
     </div>

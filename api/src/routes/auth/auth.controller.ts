@@ -5,24 +5,6 @@ import authMiddleware from "../../middleware/auth.middleware";
 
 const AuthController = Router();
 
-AuthController.get("/", authMiddleware, async (req: Request, res: Response) => {
-  const user_id = req.user?.id as number
-
-  if (!user_id) {
-    res.status(400);
-    return;
-  }
-
-  const user = await AuthService.whoami(user_id);
-
-  if (user) {
-    res.status(200).send({ user });
-  } else {
-    res.status(401).send({ message: "User not authenticated" });
-  }
-});
-
-
 AuthController.post("/signin", async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const userDTO = { email, password };
@@ -75,7 +57,20 @@ AuthController.post("/signup", async (req: Request, res: Response) => {
 });
 
 AuthController.get("/verify", authMiddleware, async (req: Request, res: Response) => {
-  res.status(200).send({ message: "Token valid" });
+  const user_id = req.user?.id as number
+
+  if (!user_id) {
+    res.status(400);
+    return;
+  }
+
+  const user = await AuthService.whoami(user_id);
+
+  if (user) {
+    res.status(200).send({ user });
+  } else {
+    res.status(401).send({ message: "User not authenticated" });
+  }
 });
 
 export default AuthController;

@@ -5,6 +5,7 @@ export type PostType = {
   content: string,
   created_at: Date,
   image_path: string
+  username: string
 }
 
 export type PostDTO = {

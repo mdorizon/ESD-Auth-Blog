@@ -3,35 +3,29 @@ import { Columns2, SquarePlus } from "lucide-react"
 import { NavPersonnalsPosts } from "@/components/nav/NavPersonnalPosts"
 import { NavUser } from "@/components/nav/nav-user"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail } from "@/components/ui/sidebar"
-import { accountData } from "@/services/auth.service"
-import { UserType } from "@/types/user.type"
 import { getAllPostsByUser } from "@/services/post.service"
 import { Link } from "react-router-dom"
+import { useAuth } from "@/hooks/useAuth"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [userPosts, setUserPosts] = React.useState([])
-  const [user, setUser] = React.useState<UserType>()
-
+  const { userData, loading} = useAuth();
+  
   // fetch user & his posts
   const fetchUserData = async() => {
     try {
-      const data = await accountData()
-      setUser(data);
-      // si un user est bien connecté on fetch ses posts
-      try {
-        const posts = await getAllPostsByUser();
-        setUserPosts(posts);
-      } catch (e) {
-        console.log('Error to fetch user posts', e)
-      }
+      const posts = await getAllPostsByUser();
+      setUserPosts(posts);
     } catch (e) {
-      console.log('Error to fetch user data', e)
+      console.log('Error to fetch user posts', e)
     }
   }
-
+  
   React.useEffect(() => {
     fetchUserData()
   }, [])
+  
+  if(loading){return}
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -47,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            {user &&
+            {userData &&
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to={"/post/add"}>
@@ -59,10 +53,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             }
           </SidebarMenu>
         </SidebarGroup>
-        {user && <NavPersonnalsPosts posts={userPosts} reloadData={fetchUserData} />}
+        {userData && <NavPersonnalsPosts posts={userPosts} reloadData={fetchUserData} />}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        {userData && <NavUser user={userData} />}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

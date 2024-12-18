@@ -1,7 +1,9 @@
+import { UserType } from "@/types/user.type";
 import { useState, useEffect } from "react";
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userData, setUserData] = useState<UserType>();
   const [loading, setLoading] = useState(true);
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,9 +23,11 @@ export const useAuth = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+        
         if (response.ok) {
           setIsAuthenticated(true);
+          const userData = await response.json();
+          setUserData(userData.user);
         } else {
           setIsAuthenticated(false);
         }
@@ -37,5 +41,5 @@ export const useAuth = () => {
     verifyToken();
   }, [API_URL]);
 
-  return { isAuthenticated, loading };
+  return { isAuthenticated, userData, loading };
 };

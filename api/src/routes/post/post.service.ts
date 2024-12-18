@@ -3,7 +3,7 @@ import client from "../../config/database.config";
 
 const getAll = async(req: Request, res: Response) => {
   try {
-    const result = await client.query('SELECT * FROM public.post');
+    const result = await client.query('SELECT public.post.*, public.user.username FROM public.post JOIN public.user ON public.post.user_id = public.user.id');
 
     res.status(200).send(result.rows);
   } catch (e) {
@@ -28,7 +28,7 @@ const getAllByUser = async(req: Request, res: Response) => {
 const getOne = async (req: Request, res: Response) => {
   const id = req.params.id;
   try {
-    const result = await client.query('SELECT * FROM public.post WHERE id = $1', [id]);
+    const result = await client.query('SELECT public.post.*, public.user.username FROM public.post JOIN public.user ON public.post.user_id = public.user.id WHERE public.post.id = $1', [id]);
 
     if (result.rows.length === 0) {
       res.status(404).send({ error: "Post not found" });
