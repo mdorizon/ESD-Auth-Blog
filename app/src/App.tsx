@@ -10,6 +10,8 @@ import PostSinglePage from "./app/post/single"
 import ProtectedRoute from "./components/ProtectedRoute"
 import UserSettings from "./app/user/settings"
 
+import 'react-quill/dist/quill.snow.css';
+
 function App() {
 
   return (
