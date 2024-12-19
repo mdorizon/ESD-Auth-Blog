@@ -55,7 +55,7 @@ const create = async (userDTO: SignupIUserDTO) => {
 };
 
 const update = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.user?.id;
   try {
     const result = (await client.query("SELECT * FROM public.user WHERE id = $1", [id])).rows;
 

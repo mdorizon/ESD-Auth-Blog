@@ -6,8 +6,8 @@ export const updateUsername = async (username: string) => {
     throw new Error("Token not found in localStorage");
   }
 
-  const response = await fetch(`${API_URL}/user/username`, {
-    method: "PATCH",
+  const response = await fetch(`${API_URL}/users`, {
+    method: "PUT",
     headers: {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json",

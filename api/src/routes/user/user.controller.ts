@@ -21,7 +21,7 @@ UserController.get("/:id", async (req: Request, res: Response) => {
 
   res.send(user);
 });
-UserController.put("/:id", authMiddleware, UserService.update);
+UserController.put("/", authMiddleware, UserService.update);
 UserController.delete("/:id", authMiddleware, UserService.remove);
 
 export default UserController;
