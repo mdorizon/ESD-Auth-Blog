@@ -6,14 +6,19 @@ import authMiddleware from "./middleware/auth.middleware";
 import PostController from "./routes/post/post.controller";
 import cors from "cors";
 import { IUser } from "./routes/user/user.types";
+import path from "path";
 
 const app = express();
 const port = 8000;
+
+// Servir les fichiers du dossier 'public/profiles' de manière statique
+app.use('/profiles', express.static(path.resolve(__dirname, 'public', 'profiles')));
 
 declare global {
   namespace Express {
     interface Request {
       user?: IUser;
+      file?: Express.Multer.File;
     }
   }
 }

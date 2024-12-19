@@ -3,6 +3,7 @@ export type UserType = {
   email: string;
   username: string;
   password: string;
+  profile_picture: string;
 }
 
 export type UserDTO = {

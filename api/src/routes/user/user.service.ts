@@ -28,7 +28,7 @@ const getOneByEmail = async (email: string): Promise<IUser | null> => {
 };
 
 const getOneById = async (id: number): Promise<Partial<IUser> | null> => {
-  const query = "SELECT id, username, email FROM public.user WHERE id = $1"; // Exclusion du mot de passe
+  const query = "SELECT id, username, email, profile_picture FROM public.user WHERE id = $1"; // Exclusion du mot de passe
   const values = [id];
 
   try {
@@ -72,11 +72,11 @@ const update = async (req: Request, res: Response) => {
       };
 
       const sqlUpdate =
-        "UPDATE public.user SET username=$1, password=$2, email=$3 WHERE id = $4";
+        "UPDATE public.user SET username=$1, email=$2, profile_picture=$3 WHERE id = $4";
       const values = [
         newUser.username,
-        req.body.password ? await bcrypt.hash(newUser.password, 10) : currentUser.password,
         newUser.email,
+        newUser.profile_picture,
         id,
       ];
       try {

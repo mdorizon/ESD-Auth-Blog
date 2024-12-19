@@ -1,7 +1,10 @@
+// components/Profile.tsx
+
 import { useState } from "react";
 import { Button } from "../../ui/button";
 import { Separator } from "../../ui/separator";
-import { updateUsername } from "@/services/user.service";
+import { updateUser } from "@/services/user.service";
+import { uploadProfilePicture } from "@/services/user.service"; // Importer le service upload
 import { toast } from "sonner";
 
 const Profile = () => {
@@ -9,16 +12,16 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  // change username
+  // Change username
   const handleUsernameSubmit = async () => {
     if (!username) {
       return;
     }
     try {
-      await updateUsername(username)
-      toast.success('Username changed !')
+      await updateUser(username);
+      toast.success("Username changed!");
     } catch {
-      toast.error('Error while changing username')
+      toast.error("Error while changing username");
     }
   };
 
@@ -30,13 +33,20 @@ const Profile = () => {
     }
   };
 
-  const handleImageSubmit = () => {
+  const handleImageSubmit = async () => {
     if (profileImage) {
-      console.log("Profile image updated:", profileImage);
+      try {
+        // Upload image and get the URL
+        const imageUrl = await uploadProfilePicture(profileImage);
 
-      // Réinitialise l'image après la soumission
-      setProfileImage(null);
-      setPreviewImage(null);
+        // Update user with the new profile picture URL
+        await updateUser(undefined, imageUrl);
+        setProfileImage(null);
+        setPreviewImage(null);
+        toast.success("Profile picture updated!");
+      } catch {
+        toast.error("Error while uploading profile picture");
+      }
     }
   };
 
@@ -49,7 +59,7 @@ const Profile = () => {
         </p>
       </div>
       <Separator className="my-6" />
-      {/* Formulaire pour changer la photo de profil */}
+      {/* Form for changing profile picture */}
       <div className="space-y-4">
         <h3 className="text-sm font-medium">Profile Picture</h3>
         <div className="flex items-center space-x-4">
