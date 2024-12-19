@@ -1,10 +1,11 @@
 import { Request, Response, Router } from "express";
 import UserService from "./user.service";
+import authMiddleware from "../../middleware/auth.middleware";
 
 const UserController = Router();
 
 UserController.get("/", UserService.getAll);
-UserController.post("/", async (req: Request, res: Response) => {
+UserController.post("/", authMiddleware, async (req: Request, res: Response) => {
   const { email, username, password } = req.body;
   const userDTO = { email, username, password };
   const user = await UserService.create(userDTO);
@@ -20,7 +21,7 @@ UserController.get("/:id", async (req: Request, res: Response) => {
 
   res.send(user);
 });
-UserController.put("/:id", UserService.update);
-UserController.delete("/:id", UserService.remove);
+UserController.put("/:id", authMiddleware, UserService.update);
+UserController.delete("/:id", authMiddleware, UserService.remove);
 
 export default UserController;
